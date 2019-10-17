@@ -45,4 +45,4 @@ index_paths(years,quarters)
 get_index_full(years,quarters)
 
 
-print('Done') 
+print('Done')
