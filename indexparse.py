@@ -10,8 +10,6 @@ client = MongoClient('localhost',27017)
 db = client.sec
 currentdate = [date.today().year,date.today().month]
 
-#df = pd.read_csv("E:/SEC/Indexes/Testing/1999QTR3.txt",'|', header = None, names = [1,2,3,4,5], skiprows = 11)
-
 def indexparser(indexframe):
     for row in range(indexframe.shape[0]):
         entry = {"CIK": int(indexframe.iloc[row,0]),
@@ -46,7 +44,7 @@ def formyears (date):
         titles.append([date[0],"QTR4"])
         
     return titles;
-    
+
 def dfmaker(dateslist):
     for dates in dateslist:
         dfs = pd.read_csv("E:/SEC/Indexes/Full/" + str(dates[0]) + "/" + dates[1] + "/" + str(dates[0]) + dates[1] + ".txt", '|', header = None, names = [1,2,3,4,5], skiprows = 11)
