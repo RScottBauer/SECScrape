@@ -8,11 +8,15 @@ import requests
 import json
 
 client = MongoClient('localhost',27017)
-db = client.sec
+db = client.hist
+symbol = "SJNK"
+underlying = "Barclays Capital US High Yield 350mn Cash Pay 0-5 Yr 2% Capped Index"
+timestart = "1331731800"
+timestop = "1574355600"
 
-url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-profile"
+url = "https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v2/get-historical-data"
 
-querystring = {"symbol": "GE"}
+querystring = {"frequency":"1d","filter":"history","period1":timestart,"period2":timestop,"symbol":symbol}
 
 headers = {
     'x-rapidapi-host': "apidojo-yahoo-finance-v1.p.rapidapi.com",
@@ -22,9 +26,12 @@ headers = {
 response = requests.request("GET", url, headers=headers, params=querystring)
 
 entry = response.text
-record = db.rapidapitest.insert_one(json.loads(entry))
+record = db.etf.insert_one(json.loads(entry))
+recordid = record.inserted_id
+recordadded = db.etf.update_one({"_id": recordid}, {"$set": {"symbol": symbol}})
+recordaddedunder = db.etf.update_one({"_id": recordid}, {"$set": {"underlying": underlying}})
 
-
-print(response.text)
-print(type(json.loads(entry)))
+print(len(response.text))
+print(symbol)
+print(underlying)
 print("Done")
